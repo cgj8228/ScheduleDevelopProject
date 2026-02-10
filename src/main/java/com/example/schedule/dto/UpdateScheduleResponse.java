@@ -1,18 +1,21 @@
 package com.example.schedule.dto;
 
+import com.example.user.entity.User;
+
 import java.time.LocalDateTime;
 
 public class UpdateScheduleResponse {
     private final Long id;
-    private final String writerName;
+    private final Long userId;
     private final String title;
     private final String content;
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
 
-    public UpdateScheduleResponse(Long id, String writerName, String title, String content, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+
+    public UpdateScheduleResponse(Long id, Long userId, String title, String content, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.id = id;
-        this.writerName = writerName;
+        this.userId = userId;
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;

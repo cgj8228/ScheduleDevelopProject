@@ -1,5 +1,6 @@
 package com.example.schedule.entity;
 
+import com.example.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,12 +14,16 @@ public class Schedule extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String writerName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user id", nullable = false)
+    private User user; // 유저 고유 식별자 필드를 가집니다.
+
     private String title;
     private String content;
 
-    public Schedule(String writerName, String title, String content){
-        this.writerName = writerName;
+    public Schedule(User user, String title, String content){
+        this.user = user;
         this.title = title;
         this.content = content;
     }

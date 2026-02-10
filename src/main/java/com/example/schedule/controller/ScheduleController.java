@@ -3,7 +3,6 @@ package com.example.schedule.controller;
 import com.example.schedule.dto.*;
 import com.example.schedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +17,7 @@ public class ScheduleController {
 
     // 게시물 생성
     @PostMapping("/schedules")
-    public ResponseEntity<CreateScheduleResponse> sava(
+    public ResponseEntity<CreateScheduleResponse> save(
             @RequestBody CreateScheduleRequest request
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.save(request));
