@@ -1,6 +1,5 @@
 package com.example.user.service;
 
-import com.example.user.controller.UserController;
 import com.example.user.dto.*;
 import com.example.user.entity.User;
 import com.example.user.repository.UserRepository;
@@ -18,12 +17,16 @@ public class UserService {
 
     // 유저 생성
     @Transactional
-    public CreateUserResponse save(CreateUserRequest request) {
+    public SignupResponse save(SignupRequest request) {
         User user = new User(request.getName(), request.getEmail(), request.getPassword());
         User savedUser = userRepository.save(user);
-        return new CreateUserResponse(
+
+        return new SignupResponse(
+                savedUser.getId(),
                 savedUser.getName(),
-                savedUser.getEmail()
+                savedUser.getEmail(),
+                savedUser.getCreatedAt(),
+                savedUser.getModifiedAt()
         );
     }
 
@@ -63,10 +66,14 @@ public class UserService {
 
     // 유저 업데이트 이름
     @Transactional
-    public UpdateUserResponse update(Long userId, UpdateUserRequest request) {
-        User user = userRepository.findById(userId).orElseThrow(
+    public UpdateUserResponse update(SessionUser sessionUser, UpdateUserRequest request) {
+        User user = userRepository.findById(sessionUser.getId()).orElseThrow(
                 () -> new IllegalArgumentException("없는 유저 입니다.")
         );
+
+        if (request.getPassword() == null || !user.getPassword().equals(request.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
 
         user.update(request.getName());
         return new UpdateUserResponse(
@@ -87,4 +94,25 @@ public class UserService {
         }
         userRepository.deleteById(userId);
     }
+
+
+    @Transactional(readOnly = true)
+    public SessionUser login(LoginRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("이메일이 존재하지 않습니다."));
+
+        if (!user.getPassword().equals(request.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        return new SessionUser(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getCreatedAt(),
+                user.getModifiedAt()
+        );
+    }
+
+
 }

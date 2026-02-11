@@ -2,7 +2,9 @@ package com.example.user.entity;
 
 import com.example.user.dto.UpdateUserRequest;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +18,14 @@ public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank(message = "이름 필수!!")
     private String name;
+
+    @NotBlank(message = "이메일 필수!!")
+    @Email
     private String email;
+
     @Min(8)
     private String password;
 
