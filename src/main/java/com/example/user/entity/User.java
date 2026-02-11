@@ -1,10 +1,8 @@
 package com.example.user.entity;
 
-import com.example.user.dto.UpdateUserRequest;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,17 +17,16 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "이름 필수!!")
+    @Column(nullable = false)
     private String name;
 
-    @NotBlank(message = "이메일 필수!!")
-    @Email
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Min(8)
+    @Column(nullable = false)
     private String password;
 
-    public User(String name, String email, String password){
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;

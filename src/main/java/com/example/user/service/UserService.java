@@ -1,5 +1,6 @@
 package com.example.user.service;
 
+import com.example.user.config.PasswordEncoder;
 import com.example.user.dto.*;
 import com.example.user.entity.User;
 import com.example.user.repository.UserRepository;
@@ -14,11 +15,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // 유저 생성
     @Transactional
     public SignupResponse save(SignupRequest request) {
-        User user = new User(request.getName(), request.getEmail(), request.getPassword());
+
+        // 비밀번호 암호화
+        String encode = passwordEncoder.encode(request.getPassword());
+
+        User user = new User(request.getName(), request.getEmail(), encode);
         User savedUser = userRepository.save(user);
 
         return new SignupResponse(
