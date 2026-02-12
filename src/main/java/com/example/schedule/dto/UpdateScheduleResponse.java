@@ -1,7 +1,5 @@
 package com.example.schedule.dto;
 
-import com.example.user.entity.User;
-
 import java.time.LocalDateTime;
 
 public class UpdateScheduleResponse {

@@ -20,10 +20,10 @@ public class ScheduleService {
 
     // schedule 생성
     @Transactional
-    public CreateScheduleResponse save(CreateScheduleRequest request) {
+    public CreateScheduleResponse save(CreateScheduleRequest request, Long userId) {
 
-        User user = userRepository.findById(request.getUserId()).orElseThrow(
-                () -> new IllegalArgumentException("없는 유저입니다.")
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("로그인 정보가 올바르지 않습니다.")
         );
 
         Schedule schedule = new Schedule(
@@ -98,7 +98,7 @@ public class ScheduleService {
     @Transactional
     public void delete(Long scheduleId) {
         boolean existence = scheduleRepository.existsById(scheduleId);
-        if (!existence){
+        if (!existence) {
             throw new IllegalArgumentException("없는 게시글 입니다.");
         }
         scheduleRepository.deleteById(scheduleId);

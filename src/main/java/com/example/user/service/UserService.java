@@ -77,7 +77,7 @@ public class UserService {
                 () -> new IllegalArgumentException("없는 유저 입니다.")
         );
 
-        if (request.getPassword() == null || !user.getPassword().equals(request.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
@@ -95,7 +95,7 @@ public class UserService {
     @Transactional
     public void delete(Long userId) {
         boolean existence = userRepository.existsById(userId);
-        if (!existence){
+        if (!existence) {
             throw new IllegalArgumentException("없는 게시글 입니다.");
         }
         userRepository.deleteById(userId);
@@ -104,21 +104,17 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public SessionUser login(LoginRequest request) {
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("이메일이 존재하지 않습니다."));
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
+                () -> new IllegalArgumentException("이메일이 존재하지 않습니다.")
+        );
 
-        if (!user.getPassword().equals(request.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
         return new SessionUser(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getCreatedAt(),
-                user.getModifiedAt()
+                user.getId()
         );
     }
-
 
 }
