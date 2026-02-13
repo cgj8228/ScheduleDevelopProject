@@ -6,6 +6,6 @@ import lombok.Getter;
 
 @Getter
 public class CreateCommentRequest {
-    @NotBlank(message = "내용 필수!!")
+    @Column(nullable = false, length = 100)
     private String content;
 }

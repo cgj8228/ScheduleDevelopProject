@@ -23,8 +23,7 @@ public class Schedule extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user; // 유저 고유 식별자 필드를 가집니다.
 
-    @NotBlank(message = "제목 필수!!")
-    @Size(max = 10, message = "제목은 10자 이내로 작성 해주세요")
+    @Column(nullable = false, length = 10)
     private String title;
 
     @NotBlank(message = "내용 필수!!")
